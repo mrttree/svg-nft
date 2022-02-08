@@ -1,10 +1,9 @@
-import { KeyOutlined, QrcodeOutlined, SendOutlined, WalletOutlined } from "@ant-design/icons";
-import { parseEther } from "@ethersproject/units";
 import { Button, Modal, Spin, Tooltip, Typography } from "antd";
-import { useUserAddress } from "eth-hooks";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import { KeyOutlined, QrcodeOutlined, SendOutlined, WalletOutlined } from "@ant-design/icons";
 import QR from "qrcode.react";
-import React, { useState } from "react";
+
 import { Transactor } from "../helpers";
 import Address from "./Address";
 import AddressInput from "./AddressInput";
@@ -13,7 +12,7 @@ import EtherInput from "./EtherInput";
 
 const { Text, Paragraph } = Typography;
 
-/*
+/**
   ~ What it does? ~
 
   Displays a wallet where you can specify address and send USD/ETH, with options to
@@ -39,10 +38,20 @@ const { Text, Paragraph } = Typography;
               (ex. "0xa870" => "user.eth") or you can enter directly ENS name instead of address
   - Provide price={price} of ether and easily convert between USD and ETH
   - Provide color to specify the color of wallet icon
-*/
+**/
 
 export default function Wallet(props) {
-  const signerAddress = useUserAddress(props.provider);
+  const [signerAddress, setSignerAddress] = useState();
+  useEffect(() => {
+    async function getAddress() {
+      if (props.signer) {
+        const newAddress = await props.signer.getAddress();
+        setSignerAddress(newAddress);
+      }
+    }
+    getAddress();
+  }, [props.signer]);
+
   const selectedAddress = props.address || signerAddress;
 
   const [open, setOpen] = useState();
@@ -312,14 +321,14 @@ export default function Wallet(props) {
             disabled={!amount || !toAddress || qr}
             loading={false}
             onClick={() => {
-              const tx = Transactor(props.provider);
+              const tx = Transactor(props.signer || props.provider);
 
               let value;
               try {
-                value = parseEther("" + amount);
+                value = ethers.utils.parseEther("" + amount);
               } catch (e) {
                 // failed to parseEther, try something else
-                value = parseEther("" + parseFloat(amount).toFixed(8));
+                value = ethers.utils.parseEther("" + parseFloat(amount).toFixed(8));
               }
 
               tx({
