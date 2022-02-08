@@ -1,7 +1,7 @@
 // deploy/00_deploy_your_contract.js
 
 const { ethers } = require("hardhat");
-
+const chalk = require("chalk");
 const localChainId = "31337";
 
 // const sleep = (ms) =>
@@ -17,7 +17,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("YourContract", {
+  await deploy("YourCollectible", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
@@ -26,13 +26,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   });
 
   // Getting a previously deployed contract
-  const YourContract = await ethers.getContract("YourContract", deployer);
+  // deploy the contract with all the artworks forSale
+  // const yourCollectible = await deploy("YourCollectible"/*,[ bytes32Array ]*/) // <-- add in constructor args like line 19 vvvv
+  const yourCollectible = await ethers.getContract("YourCollectible", deployer);
+  // yourCollectible.transferOwnership("0x34aA3F359A9D614239015126635CE7732c18fDF3") //austingriffith.eth
   /*  await YourContract.setPurpose("Hello");
   
     To take ownership of yourContract using the ownable library uncomment next line and add the 
     address you want to be the owner. 
     // await yourContract.transferOwnership(YOUR_ADDRESS_HERE);
-
     //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!
   */
 
@@ -75,5 +77,10 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   // } catch (error) {
   //   console.error(error);
   // }
+  console.log(
+    " 💾  Artifacts (address, abi, and args) saved to: ",
+    chalk.blue("packages/hardhat/artifacts/"),
+    "\n\n"
+  );
 };
-module.exports.tags = ["YourContract"];
+module.exports.tags = ["YourCollectible"];
