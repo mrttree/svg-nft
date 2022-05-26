@@ -1,7 +1,8 @@
-pragma solidity >=0.6.0 <0.7.0;
+pragma solidity >=0.8.0 <0.9.0;
 //SPDX-License-Identifier: MIT
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -13,7 +14,7 @@ import './ToColor.sol';
 
 // GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
 
-contract YourCollectible is ERC721, Ownable {
+contract YourCollectible is ERC721, ERC721Enumerable, Ownable {
 
   using Strings for uint256;
   using HexStrings for uint160;
@@ -29,6 +30,22 @@ contract YourCollectible is ERC721, Ownable {
   mapping (uint256 => uint256) public chubbiness;
 
   uint256 mintDeadline = block.timestamp + 24 hours;
+
+  function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+      internal
+      override(ERC721, ERC721Enumerable)
+  {
+      super._beforeTokenTransfer(from, to, tokenId);
+  }
+
+  function supportsInterface(bytes4 interfaceId)
+      public
+      view
+      override(ERC721, ERC721Enumerable)
+      returns (bool)
+  {
+      return super.supportsInterface(interfaceId);
+  }
 
   function mintItem()
       public
