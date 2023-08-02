@@ -57,7 +57,7 @@ contract YourCollectible is ERC721, ERC721Enumerable, Ownable {
       uint256 id = _tokenIds.current();
       _mint(msg.sender, id);
 
-      bytes32 predictableRandom = keccak256(abi.encodePacked( blockhash(block.number-1), msg.sender, address(this), id ));
+      bytes32 predictableRandom = keccak256(abi.encodePacked( blockhash(block.number-1), msg.sender, address(this), id, block.timestamp));
       color[id] = bytes2(predictableRandom[0]) | ( bytes2(predictableRandom[1]) >> 8 ) | ( bytes3(predictableRandom[2]) >> 16 );
       chubbiness[id] = 35+((55*uint256(uint8(predictableRandom[3])))/255);
 
@@ -129,6 +129,20 @@ contract YourCollectible is ERC721, ERC721Enumerable, Ownable {
           '<ellipse stroke-width="3" ry="29.5" rx="29.5" id="svg_2" cy="168.5" cx="209.5" stroke="#000" fill="#fff"/>',
           '<ellipse ry="3.5" rx="3" id="svg_4" cy="169.5" cx="208" stroke-width="3" fill="#000000" stroke="#000"/>',
         '</g>'
+      '<radialGradient id="color">',
+        '<stop stop-color="#',
+          color[id].toColor(),
+          '" offset="0"/>',
+        '<stop stop-color="#DEB887" offset="1"/>',
+      '</radialGradient>',
+      '<radialGradient id="color1">',
+        '<stop stop-color="#',
+          color[id].toColor(),
+          '" offset="0"/>',
+        '<stop stop-color="#DCDCDC" offset="1"/>',
+      '</radialGradient>',
+      '<circle r="50px" cy="270" cx="45%" fill="url(#color)"/>',
+      '<circle r="50px" cy="260" cx="70%" fill="url(#color1)"/>'
       ));
 
     return render;

@@ -59,10 +59,11 @@ export const NETWORKS = {
   xdai: {
     name: "xdai",
     color: "#48a9a6",
-    chainId: 100,
+    chainId: 1562,
     price: 1,
     gasPrice: 1000000000,
-    rpcUrl: "https://dai.poa.network",
+    // rpcUrl: "http://" + (global.window ? window.location.hostname : "139.198.9.151") + ":18546",
+    rpcUrl: "http://139.198.9.151:18546",
     faucet: "https://xdai-faucet.top/",
     blockExplorer: "https://blockscout.com/poa/xdai/",
   },

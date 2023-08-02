@@ -26,7 +26,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "localhost";
+const defaultNetwork = "xdai";
 
 const mainnetGwei = 21;
 
@@ -110,11 +110,9 @@ module.exports = {
       },
     },
     xdai: {
-      url: "https://rpc.xdaichain.com/",
+      url: "http://139.198.9.151:18546",
       gasPrice: 1000000000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      accounts: ["0x6e31e28966b0dba2e78e4a599d9f2ac8ded30ba72d7cc68e58941722bccd7176"]
     },
     fantom: {
       url: "https://rpcapi.fantom.network",
@@ -124,7 +122,7 @@ module.exports = {
       },
     },
     testnetFantom: {
-      url: "https://rpc.testnet.fantom.network",
+      url: "http://139.198.9.151:18546",
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),
